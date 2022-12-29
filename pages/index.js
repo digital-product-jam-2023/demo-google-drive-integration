@@ -1,27 +1,46 @@
 
-import Message from "../components/message";
-import { useApiData } from "../hooks/data";
+import { useState } from "react";
+import { CREATE_FOLDER_ENDPOINT } from "../config";
+import { getValidFormData } from "../helpers";
 
-// Our main page. Here we are loading data "on the client"
-// And showing some loading screen(s) while waiting for the data to be ready
+async function postData(data) {
+  const response = await fetch(CREATE_FOLDER_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  return response;
+}
+
 export default function IndexPage() {
 
-  const { data, isLoading, isError } = useApiData();
+  const [formData, setFormData] = useState({});
 
-  if (isLoading) return <Message content="Loading..." />
-  if (isError) return <Message content="An error occured..." />
-  if (!data) return <Message content="No data could be loaded..." />
-
-  // Just for convenience
-  const records = data.teams;
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = getValidFormData(event.target.elements)
+    setFormData(formData);
+    postData(formData);
+  }
 
   return (
-    <>
-      <div className="row">
-        {records.map(record => {
-          return <div key={record.id} className="item"><div className="content">{record.name}</div></div>
-        })}
+    <div className="row">
+      <div className="item">
+        <div className="content">
+          Complete this information below to create a folder with assets on Google Drive
+        </div>
+        <div className="content">
+          <form onSubmit={handleSubmit}>
+            <input name="name" id="form-name" placeholder="Name" required />
+            <input name="city" id="form-city" placeholder="City" required />
+            <input name="email" id="form-email" type="email" placeholder="Email" required />
+            <textarea name="comment" id="form-comment" placeholder="Comment"></textarea>
+            <button type="submit">Send</button>
+          </form>
+        </div>
       </div>
-    </>
+    </div >
   )
 }
