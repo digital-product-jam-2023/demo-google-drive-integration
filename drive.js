@@ -1,3 +1,4 @@
+import fs from "fs";
 import { google } from "googleapis";
 import { GOOGLE_CREDENTIALS, GOOGLE_DRIVE_DIRECTORY, GOOGLE_SCOPES } from "./config";
 
@@ -68,6 +69,24 @@ export async function writeDataToSheet(spreadsheetId, data) {
   return result;
 }
 
-export async function uploadAssetsToFolder() {
-
+export async function uploadAssetsToFolder(folderId, files) {
+  const results = [];
+  for (const [key, value] of Object.entries(files)) {
+    const { originalFilename, filepath, mimetype } = value;
+    const clientResponse = await driveClient.files.create({
+      resource: {
+        parents: [folderId],
+        name: originalFilename,
+        mimeType: mimetype,
+      },
+      media: {
+        body: fs.createReadStream(filepath),
+        mimeType: mimetype,
+      }
+    })
+    if (clientResponse.status === 200) {
+      results.push(clientResponse.data.id);
+    }
+  }
+  return results;
 }

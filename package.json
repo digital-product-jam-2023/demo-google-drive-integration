@@ -13,6 +13,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "formidable": "^2.1.1",
     "googleapis": "^109.0.1",
     "install": "^0.13.0",
     "next": "^13.0.1",

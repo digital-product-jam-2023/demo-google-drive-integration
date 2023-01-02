@@ -4,7 +4,7 @@ export function getValidFormData(formElements) {
   const validElements = Array.from(formElements).filter(e => FORM_VALID_FIELDS.includes(e.name));
   const validData = {}
   for (const element of validElements) {
-    validData[element.name] = element.value;
+    validData[element.name] = element.name === "file" ? element.files[0]: element.value;
   }
   return validData;
 }

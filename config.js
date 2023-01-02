@@ -9,6 +9,6 @@ export const GOOGLE_SCOPES = [
   "https://www.googleapis.com/auth/drive.file"
 ];
 export const GOOGLE_DRIVE_DIRECTORY = process.env.GOOGLE_DRIVE_DIRECTORY;
-export const FORM_VALID_FIELDS = ["name", "city", "email", "comment"];
+export const FORM_VALID_FIELDS = ["name", "city", "email", "comment", "file"];
 export const CREATE_FOLDER_ENDPOINT = "/api/create-folder/";
 export const LIST_FOLDER_ENDPOINT = "/api/list/";
